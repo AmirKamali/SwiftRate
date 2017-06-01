@@ -11,10 +11,11 @@ Getting Started
 
 Configuration
 -------------
-1. SwiftRate provides class methods to configure its behavior. See [`SwiftRate.h`] [SwiftRate.h] for more information.
+1. Add This code to your App Delegate 'SwiftRate.RegisterSwiftRate()' or  SwiftRate.RegisterSwiftRate(debug: true) for quickly turn on debug mode
+2. SwiftRate provides class methods to configure its behavior. See [SwiftRate.swift] for more information.
 
 ```swift
-SwiftRate.config_AppID(appID: "552035781")
+SwiftRate.config_AppID(appID: "1234567890")
 SwiftRate.config_DaysUntilPrompt(value:1)
 SwiftRate.config_UsesUntilPrompt(value: 10)
 SwiftRate.config_longTermSignificantEventsUntilPrompt(value: -1)
@@ -23,16 +24,15 @@ SwiftRate.config_TimeBeforeReminding(value: 2)
 SwiftRate.config_DebugMode(debug: true)
 ```
 
-2. Call `[SwiftRate setAppId:@"yourAppId"]` with the app id provided by Apple. A good place to do this is at the beginning of your app delegate's `application:didFinishLaunchingWithOptions:` method.
-3. Call `[SwiftRate appLaunched:YES]` at the end of your app delegate's `application:didFinishLaunchingWithOptions:` method.
-4. Call `[SwiftRate appEnteredForeground:YES]` in your app delegate's `applicationWillEnterForeground:` method.
-5. (OPTIONAL) Call `[SwiftRate userDidSignificantEvent:YES]` when the user does something 'significant' in the app.
+3. Call `SwiftRate.config_AppID(appID: "your App ID")` with the app id provided by Apple. A good place to do this is at the beginning of your app delegate's `application:didFinishLaunchingWithOptions:` method.
+4. (OPTIONAL) Call `SwiftRate.userDidSignificantEvent(eventType: .shortTerm)` when the user does something 'significant' in the app since app opened.
+5. (OPTIONAL) Call `SwiftRate.userDidSignificantEvent(eventType: .longTerm)` when the user does something 'significant' since the app was installed/updated.
 
 ###Development
-Setting `[SwiftRate setDebug:YES]` will ensure that the rating request is shown each time the app is launched.
+Setting `SwiftRate.config_DebugMode(debug: true)` will ensure that the rating request is shown each time the app is launched.
 
 ###Production
-Make sure you set `[SwiftRate setDebug:NO]` to ensure the request is not shown every time the app is launched. Also make sure that each of these components are set in the `application:didFinishLaunchingWithOptions:` method.
+Make sure you set `SwiftRate.config_DebugMode(debug: false)` to ensure the request is not shown every time the app is launched. Also make sure that each of these components are set in the `application:didFinishLaunchingWithOptions:` method.
 
 This example states that the rating request is only shown when the app has been launched 5 times **and** after 7 days.
 
@@ -73,4 +73,4 @@ This library is based on Appirater library with major update
 [stackoverflow]: http://stackoverflow.com/
 [homepage]: https://arashpayan.com/blog/2009/09/07/presenting-SwiftRate/
 [Amir Kamali]: http://Kamali.io
-
+[SwiftRate.swift]: https://github.com/AmirKamali/SwiftRate/blob/master/SwiftRate.swift
