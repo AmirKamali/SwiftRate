@@ -57,7 +57,8 @@ class SwiftRate
     private  var appId = ""
     private  var daysUntilPrompt:Double = -1
     private var usesUntilPrompt:Int = 3
-    private var significantEventsUntilPrompt = -1
+    private var shortTermSignificantEventsUntilPrompt = -1
+    private var longTermSignificantEventsUntilPrompt = -1
     private var timeBeforeReminding:Double = 1
     private var debug = false
     
@@ -77,7 +78,7 @@ class SwiftRate
     static func RegisterSwiftRate(debug:Bool = false)
     {
         _ = sharedInstance
-        sharedInstance.config_DebugMode(debug: debug)
+        config_DebugMode(debug: debug)
         appLaunched(canPromptForRating: true)
     }
     static var sharedInstance:SwiftRate
@@ -103,62 +104,65 @@ class SwiftRate
     
     
     //MARK:- SwiftRate Configurations
-    func config_AppID(appID:String)
+    static func config_AppID(appID:String)
     {
-        self.appId = appID
+        SwiftRate.sharedInstance.appId = appID
     }
-    func config_DaysUntilPrompt(days:Double) {
-        self.daysUntilPrompt = days
-    }
-    
-    func config_DaysUntilPrompt(value:Double) {
-        self.daysUntilPrompt = value;
+    static func config_DaysUntilPrompt(days:Double) {
+        SwiftRate.sharedInstance.daysUntilPrompt = days
     }
     
-    func config_UsesUntilPrompt(value:Int) {
-        self.usesUntilPrompt = value;
+    static func config_DaysUntilPrompt(value:Double) {
+        SwiftRate.sharedInstance.daysUntilPrompt = value;
     }
     
-    func config_SignificantEventsUntilPrompt(value:NSInteger) {
-        self.significantEventsUntilPrompt = value;
+    static func config_UsesUntilPrompt(value:Int) {
+        SwiftRate.sharedInstance.usesUntilPrompt = value;
     }
     
-    func config_TimeBeforeReminding(value:Double) {
-        self.timeBeforeReminding = value
+    static func config_shortTermSignificantEventsUntilPrompt(value:NSInteger) {
+        SwiftRate.sharedInstance.shortTermSignificantEventsUntilPrompt = value;
     }
     
-    func config_CustomAlertTitle(title:String)
+    static func config_longTermSignificantEventsUntilPrompt(value:NSInteger) {
+        SwiftRate.sharedInstance.longTermSignificantEventsUntilPrompt = value;
+    }
+    static func config_TimeBeforeReminding(value:Double) {
+        SwiftRate.sharedInstance.timeBeforeReminding = value
+    }
+    
+    static func config_CustomAlertTitle(title:String)
     {
         SwiftRate.sharedInstance.alertTitle = title;
     }
     
-    func config_CustomAlertMessage(message:String)
+    static func config_CustomAlertMessage(message:String)
     {
         SwiftRate.sharedInstance.alertMessage = message;
     }
     
-    func config_CustomAlertCancelButtonTitle(cancelTitle:String)
+    static func config_CustomAlertCancelButtonTitle(cancelTitle:String)
     {
         SwiftRate.sharedInstance.alertCancelTitle = cancelTitle;
     }
     
-    func config_CustomAlertRateButtonTitle(rateTitle:String)
+    static func config_CustomAlertRateButtonTitle(rateTitle:String)
     {
         SwiftRate.sharedInstance.alertRateTitle = rateTitle;
     }
     
-    func config_CustomAlertRateLaterButtonTitle(rateLaterTitle:String)
+    static func config_CustomAlertRateLaterButtonTitle(rateLaterTitle:String)
     {
         SwiftRate.sharedInstance.alertRateLaterTitle = rateLaterTitle;
     }
     
-    func config_DebugMode(debug:Bool)
+    static func config_DebugMode(debug:Bool)
     {
-        self.debug = debug;
+        SwiftRate.sharedInstance.debug = debug;
     }
     
-    func config_AlwaysUseMainBundle(alwaysUseMainBundle:Bool) {
-        self.alwaysUseMainBundle = alwaysUseMainBundle;
+    static func config_AlwaysUseMainBundle(alwaysUseMainBundle:Bool) {
+        SwiftRate.sharedInstance.alwaysUseMainBundle = alwaysUseMainBundle;
     }
     //MARK: - Swift Rate Logics
     
@@ -222,13 +226,13 @@ class SwiftRate
         
         // check if the user has done enough significant events in Total
         let sigEventCount = userDefaults.integer(forKey:kSRLongTermEventCount)
-        if (sigEventCount < significantEventsUntilPrompt)
+        if (sigEventCount < longTermSignificantEventsUntilPrompt)
         {
             return false;
         }
         // check if the user has done enough significant events in recently
         let sigShortEventCount = userDefaults.integer(forKey:kSRShortTermEventCount)
-        if (sigShortEventCount < significantEventsUntilPrompt)
+        if (sigShortEventCount < shortTermSignificantEventsUntilPrompt)
         {
             return false;
         }
@@ -398,12 +402,12 @@ class SwiftRate
     
     
     
-    static func userDidSignificantEvent(shortTerm:Bool,canPromptForRating:Bool)
+    static func userDidSignificantEvent(eventType:swiftRateSignificantEventType)
     {
         let instance = SwiftRate.sharedInstance
         instance.eventQueue?.addOperation {
-            instance.incrementSignificantEventCount(shortTerm: shortTerm);
-            instance.checkForRate(canPromptForRating: canPromptForRating)
+            instance.incrementSignificantEventCount(shortTerm: (eventType == .shortTerm));
+            instance.checkForRate(canPromptForRating: true)
             
         }
     }
@@ -604,4 +608,9 @@ protocol swiftRateProtocol {
     func didOptForRating()
     func DidOptToRemindLater()
     func DidDeclineToRate()
+}
+enum swiftRateSignificantEventType
+{
+    case shortTerm
+    case longTerm
 }
