@@ -1,19 +1,19 @@
 {
-  "name": "Appirater",
-  "version": "2.1.0",
+  "name": "Swift Rate",
+  "version": "1.0.0",
   "platforms": {
     "ios": "5.0"
   },
-  "summary": "A utility that reminds your iPhone app's users to review the app.",
-  "homepage": "https://arashpayan.com/blog/2009/09/07/presenting-appirater/",
+  "summary": "App rating management for iOS written in Swift.",
+  "homepage": "http://Kamali.io",
   "authors": {
-    "Arash Payan": "arash@ara.sh"
+    "Arash Payan": "Amir@Kamali.io"
   },
   "source": {
-    "git": "https://github.com/arashpayan/appirater.git",
+    "git": "https://github.com/AmirKamali/SwiftRate",
     "tag": "2.1.0"
   },
-  "source_files": "*.{h,m}",
+  "source_files": "*.{swift}",
   "resource_bundles": {
     "Appirater": [
       "*.lproj"
@@ -27,6 +27,6 @@
   "weak_frameworks": "StoreKit",
   "license": {
     "type": "MIT",
-    "text": "Copyright 2016. Arash Payan. This library is distributed under the terms of the MIT/X11."
+    "text": "Copyright 2017. Amir Kamali. This library is distributed under the terms of the MIT/X11."
   }
 }
